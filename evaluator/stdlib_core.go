@@ -577,7 +577,27 @@ func typeFun(args ...object.Object) object.Object {
 	case *object.Function:
 		return &object.String{Value: "function"}
 	case *object.Int:
-		return &object.String{Value: "integer"}
+		return &object.String{Value: "int"}
+	case *object.Int8:
+			return &object.String{Value: "int8"}
+	case *object.Int16:
+			return &object.String{Value: "int16"}
+	case *object.Int32:
+			return &object.String{Value: "int32"}
+	case *object.Int64:
+			return &object.String{Value: "int64"}
+	case *object.Uint:
+		return &object.String{Value: "uint"}
+	case *object.Uint8:
+			return &object.String{Value: "uint8"}
+	case *object.Uint16:
+			return &object.String{Value: "uint16"}
+	case *object.Uint32:
+			return &object.String{Value: "uint32"}
+	case *object.Uint64:
+			return &object.String{Value: "uint64"}
+	case *object.Uintptr:
+			return &object.String{Value: "uintptr"}
 	case *object.Float:
 		return &object.String{Value: "float"}
 	case *object.Hash:

@@ -348,7 +348,7 @@ func (l *Lexer) readIdentifier() string {
 	//
 	types := []string{"string.",
 		"array.",
-		"integer.", //FIXME: If I rename integer to int here, ints stop working when parsing files which use int variables. Why?
+		"int.",
 		"int8.",
 		"int16.",
 		"int32.",
