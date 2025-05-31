@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/skx/monkey/token"
+	"github.com/xplshn/monk/token"
 )
 
 // Lexer holds our object-state.

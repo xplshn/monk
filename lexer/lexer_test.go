@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/skx/monkey/token"
+	"github.com/xplshn/monk/token"
 )
 
 func TestNull(t *testing.T) {

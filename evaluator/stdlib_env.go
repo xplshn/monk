@@ -3,7 +3,7 @@ package evaluator
 import (
 	"os"
 
-	"github.com/skx/monkey/object"
+	"github.com/xplshn/monk/object"
 )
 
 // os.getenv() -> ( Hash )

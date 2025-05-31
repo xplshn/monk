@@ -1,11 +1,11 @@
-// Monkey is a scripting language implemented in golang, based upon
+// Monk is a scripting language implemented in golang, based upon
 // the book "Write an Interpreter in Go", written by Thorsten Ball.
 //
 // This implementation adds a number of tweaks, improvements, and new
-// features.  For example we support file-based I/O, regular expressions,
+// features. For example we support file-based I/O, regular expressions,
 // the ternary operator, and more.
 //
-// For full details please consult the project homepage https://github.com/skx/monkey/
+// For full details please consult the project homepage https://github.com/xplshn/monk
 package main
 
 import (
@@ -15,10 +15,10 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/skx/monkey/evaluator"
-	"github.com/skx/monkey/lexer"
-	"github.com/skx/monkey/object"
-	"github.com/skx/monkey/parser"
+	"github.com/xplshn/monk/evaluator"
+	"github.com/xplshn/monk/lexer"
+	"github.com/xplshn/monk/object"
+	"github.com/xplshn/monk/parser"
 )
 
 // This version-string will be updated via CI system for generated binaries.
@@ -90,7 +90,7 @@ func Execute(input string) int {
 	//  Note that here our environment will still contain
 	// the code we just loaded from our data-resource
 	//
-	//  (i.e. Our monkey-based standard library.)
+	//  (i.e. Our monk-based standard library.)
 	//
 	evaluator.Eval(program, env)
 	return 0
@@ -113,7 +113,7 @@ func main() {
 	// Showing the version?
 	//
 	if *vers {
-		fmt.Printf("monkey %s\n", version)
+		fmt.Printf("monk %s\n", version)
 		os.Exit(1)
 	}
 

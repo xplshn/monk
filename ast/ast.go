@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/skx/monkey/token"
+	"github.com/xplshn/monk/token"
 )
 
 // Node reresents a node.

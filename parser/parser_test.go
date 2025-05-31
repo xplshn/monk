@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/skx/monkey/ast"
-	"github.com/skx/monkey/lexer"
+	"github.com/xplshn/monk/ast"
+	"github.com/xplshn/monk/lexer"
 )
 
 func TestLetStatements(t *testing.T) {
@@ -15,6 +15,11 @@ func TestLetStatements(t *testing.T) {
 		expectedIdentifier string
 		expectedValue      interface{}
 	}{
+		{"var x =5;", "x", 5},
+		{"var z =1.3;", "z", 1.3},
+		{"var y = true;", "y", true},
+		{"var foobar=y;", "foobar", "y"},
+		// Monkey compat
 		{"let x =5;", "x", 5},
 		{"let z =1.3;", "z", 1.3},
 		{"let y = true;", "y", true},

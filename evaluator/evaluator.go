@@ -15,8 +15,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/skx/monkey/ast"
-	"github.com/skx/monkey/object"
+	"github.com/xplshn/monk/ast"
+	"github.com/xplshn/monk/object"
 )
 
 // pre-defined object including Nil, True and False
@@ -1301,7 +1301,7 @@ func evalObjectCallExpression(ctx context.Context, call *ast.ObjectCallExpressio
 		// succeed, that probably means that the function wasn't
 		// implemented in go.
 		//
-		// So now we want to look for it in monkey, and we have
+		// So now we want to look for it in monk, and we have
 		// enough details to find the appropriate function.
 		//
 		//  * We have the object involved.
@@ -1372,7 +1372,7 @@ func evalObjectCallExpression(ctx context.Context, call *ast.ObjectCallExpressio
 
 	//
 	// If we hit this point we have had a method invoked which
-	// was neither defined in go nor monkey.
+	// was neither defined in go nor monk.
 	//
 	// e.g. "steve".md5sum()
 	//

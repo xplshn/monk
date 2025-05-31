@@ -9,9 +9,9 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/skx/monkey/lexer"
-	"github.com/skx/monkey/object"
-	"github.com/skx/monkey/parser"
+	"github.com/xplshn/monk/lexer"
+	"github.com/xplshn/monk/object"
+	"github.com/xplshn/monk/parser"
 )
 
 // Change a mode of a file - note the second argument is a string
@@ -46,7 +46,7 @@ func chmodFun(args ...object.Object) object.Object {
 	return &object.Boolean{Value: true}
 }
 
-// evaluate a string containing monkey-code
+// evaluate a string containing monk-code
 func evalFun(env *object.Environment, args ...object.Object) object.Object {
 	if len(args) != 1 {
 		return newError("wrong number of arguments. got=%d, want=1",

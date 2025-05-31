@@ -9,14 +9,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/skx/monkey/evaluator"
-	"github.com/skx/monkey/lexer"
-	"github.com/skx/monkey/object"
-	"github.com/skx/monkey/parser"
+	"github.com/xplshn/monk/evaluator"
+	"github.com/xplshn/monk/lexer"
+	"github.com/xplshn/monk/object"
+	"github.com/xplshn/monk/parser"
 )
 
-// FuzzMonkey runs the fuzz-testing against our parser and interpreter.
-func FuzzMonkey(f *testing.F) {
+// FuzzMonk runs the fuzz-testing against our parser and interpreter.
+func FuzzMonk(f *testing.F) {
 
 	// Known errors we might see
 	known := []string{
