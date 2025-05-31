@@ -1,6 +1,6 @@
 //
 // This file contains functions available by default, implemented in 100%
-// pure monkey.
+// pure monk.
 //
 // i.e. This is part of our standard-library.
 //
@@ -117,10 +117,10 @@ assert( "!first([])" );
 // The rest of an array - i.e. all elements EXCEPT the first
 //
 function rest( array ) {
-  let result = [];
+  var result = [];
 
   if ( len(array) > 1 ) {
-    let i = 1;
+    var i = 1;
     for( i < len(array) ) {
       result = push(result, array[i]);
       i++;
@@ -178,14 +178,14 @@ assert( "![\"steve\",3].empty?()" );
 // items for which the predicate returned true.
 //
 function array.filter( predicate ) {
-   let i = 0;
-   let l = len(self);
-   let result = [];
+   var i = 0;
+   var l = len(self);
+   var result = [];
 
    for( i < l ) {
-      let entry = self[i];
+      var entry = self[i];
       if (predicate(entry)) {
-         let result = push( result, entry );
+         var result = push( result, entry );
       }
       i++;
    }
@@ -195,8 +195,8 @@ function array.filter( predicate ) {
 
 
 // Filter an array and keep only values which are "2".
-assert( "let a = [ 1, 2, 3 , -1, \"steve\", 44 ];
-         let a = a.filter( fn(n) { return n == 2 ; } );
+assert( "var a = [ 1, 2, 3 , -1, \"steve\", 44 ];
+         var a = a.filter( fn(n) { return n == 2 ; } );
          if ( a.string() == \"[2]\" ) {
              return true;
          } else {
@@ -243,18 +243,18 @@ assert( "! [1,2,3].includes?(23)" );
 //
 function array.min() {
 
-   let i = 0;
+   var i = 0;
 
-   let l = len(self);
+   var l = len(self);
    if ( l < 1 ) {
       return 0;
    }
 
    // Assume first value is minimum
-   let min = self[0];
+   var min = self[0];
 
    // type checking.
-   if ( type(min) != "integer" && type(min) != "float" ) {
+   if ( type(min) != "int" && type(min) != "float" ) {
       puts( "array.min only works on numbers - not " , type(min), "\n");
       exit(1);
    }
@@ -263,7 +263,7 @@ function array.min() {
    for( i < l ) {
 
      // type checking.
-     if ( type(self[i]) != "integer" && type(self[i]) != "float" ) {
+     if ( type(self[i]) != "int" && type(self[i]) != "float" ) {
         puts( "array.min only works on numbers - not " , type(self[i]), "\n");
         exit(1);
      }
@@ -288,18 +288,18 @@ assert( "( [].min() == 0 )", "minimum of an empty array is zero" );
 //
 function array.max() {
 
-   let i = 0;
+   var i = 0;
 
-   let l = len(self);
+   var l = len(self);
    if ( l < 1 ) {
       return 0;
    }
 
    // Assume first value is maximum
-   let max = self[0];
+   var max = self[0];
 
    // ensure we're dealing with types
-   if ( type(max) != "integer" && type(max) != "float" ) {
+   if ( type(max) != "int" && type(max) != "float" ) {
       puts( "array.max only works on numbers - not " , type(max), "\n");
       exit(1);
    }
@@ -308,7 +308,7 @@ function array.max() {
    for( i < l ) {
 
      // type checking.
-     if ( type(self[i]) != "integer" && type(self[i]) != "float" ) {
+     if ( type(self[i]) != "int" && type(self[i]) != "float" ) {
         puts( "array.max only works on numbers - not " , type(self[i]), "\n");
         exit(1);
      }
@@ -332,9 +332,9 @@ assert( "( [].max() == 0 )", "maximum of an empty array is zero" );
 // Join the elements of an array by the given string.
 //
 function array.join( char ) {
-   let r = "";
-   let i = 0;
-   let l = len(self);
+   var r = "";
+   var i = 0;
+   var l = len(self);
 
    // For each entry.
    for( i < l ) {
@@ -364,11 +364,11 @@ assert( "[1,2,3].join( \"\" ) == \"123\"" );
 // Reverse an array.
 //
 function array.reverse() {
-  let r = [];
-  let l = len(self);
+  var r = [];
+  var l = len(self);
 
   for( l > 0 ) {
-     let r = push( r, self[l-1] );
+     var r = push( r, self[l-1] );
      l--;
   }
   return r;
@@ -387,8 +387,8 @@ assert( "string([1,2,3].reverse()) == \"[3, 2, 1]\"" );
 function array.sorted?() {
 
   // Ensure each array-member has the same type.
-  let tmp = {};
-  let i = 0;
+  var tmp = {};
+  var i = 0;
 
   // Record the types.
   for( i < len(self) ) {
@@ -403,8 +403,8 @@ function array.sorted?() {
      exit(1);
   }
 
-  let i = 1;
-  let l = len(self);
+  var i = 1;
+  var l = len(self);
 
   // Array of zero/one element is always sorted.
   if ( l < 2 ) {
@@ -444,21 +444,21 @@ assert( "[].sorted?()" );
 // statement.  (Due to the nested if usage here.)
 //
 function array.swap( a, b ) {
-  let aVal = self[b];
-  let bVal = self[a];
+  var aVal = self[b];
+  var bVal = self[a];
 
-  let r = [];
-  let i = 0;
-  let l = len(self);
+  var r = [];
+  var i = 0;
+  var l = len(self);
 
   for( i < l ) {
      if ( i == a ) {
-        let r = push(r, aVal);
+        var r = push(r, aVal);
      } else {
         if ( i == b ) {
-           let r = push(r,bVal );
+           var r = push(r,bVal );
         } else {
-           let r = push( r, self[i] );
+           var r = push( r, self[i] );
         }
      }
      i++;
@@ -467,8 +467,8 @@ function array.swap( a, b ) {
   return r;
 }
 
-assert( "let a = [10,20]; a = a.swap(0,1); if ( a[0] == 20 ) { true; } else { false ; }" );
-assert( "let a = [10,20]; a = a.swap(0,1); if ( a[1] == 10 ) { true; } else { false ; }" );
+assert( "var a = [10,20]; a = a.swap(0,1); if ( a[0] == 20 ) { true; } else { false ; }" );
+assert( "var a = [10,20]; a = a.swap(0,1); if ( a[1] == 10 ) { true; } else { false ; }" );
 
 
 
@@ -483,8 +483,8 @@ assert( "let a = [10,20]; a = a.swap(0,1); if ( a[1] == 10 ) { true; } else { fa
 function array.sort() {
 
   // Ensure each array-member has the same type.
-  let tmp = {};
-  let i = 0;
+  var tmp = {};
+  var i = 0;
 
   // Record the types.
   for( i < len(self) ) {
@@ -503,8 +503,8 @@ function array.sort() {
   for( ! self.sorted?() ) {
 
      // make a pass over the array.
-     let i = 1;
-     let l = len(self);
+     var i = 1;
+     var l = len(self);
      for( i < l ) {
 
         // if this element is wrong swap it.
@@ -519,10 +519,10 @@ function array.sort() {
   return self;
 }
 
-assert( "let a = [ 3, 2, 1 ]; a = a.sort(); a.sorted?()" );
-assert( "let a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1" );
-assert( "let a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2" );
-assert( "let a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3" );
+assert( "var a = [ 3, 2, 1 ]; a = a.sort(); a.sorted?()" );
+assert( "var a = [ 3, 2, 1 ]; a = a.sort(); a[0] == 1" );
+assert( "var a = [ 3, 2, 1 ]; a = a.sort(); a[1] == 2" );
+assert( "var a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3" );
 
 
 
@@ -535,17 +535,17 @@ assert( "let a = [ 3, 2, 1 ]; a = a.sort(); a[2] == 3" );
 //
 function array.map( fnc ) {
 
-   let result = [];
+   var result = [];
 
    foreach item in self {
-      let result = push( result, fnc(item) );
+      var result = push( result, fnc(item) );
    }
 
    return result;
 }
 
 
-assert( "let a = [3,9,-4];
+assert( "var a = [3,9,-4];
          a = a.map(fn(n) { return n * n; });
          a = a.sort();
          if( a.string() == \"[9, 16, 81]\" ) {
@@ -553,7 +553,7 @@ assert( "let a = [3,9,-4];
          } else {
            false;
          }" );
-assert( "let a = [2,-1,-12];
+assert( "var a = [2,-1,-12];
          a = a.map(fn(n) { return n +2; });
          a = a.sort();
          if( a.string() == \"[-10, 1, 4]\" ) {
@@ -587,7 +587,7 @@ assert( "string([1,1,1,1,2].uniq()) == \"[1, 2]\"" );
 
 
 //
-// Convert a float to an integer.
+// Convert a float to an int.
 //
 // Like Go we discard the value after the period, so 4.9 will become 4.
 //
@@ -595,8 +595,8 @@ function float.to_i() {
    return( int( self ) );
 }
 
-assert( "type( 3.1.to_i() ) == \"integer\"" );
-assert( "let a = 3.1; if ( a.to_i() == 3 ) { return true; } else { return false ; } " );
+assert( "type( 3.1.to_i() ) == \"int\"" );
+assert( "var a = 3.1; if ( a.to_i() == 3 ) { return true; } else { return false ; } " );
 
 
 
@@ -623,9 +623,9 @@ assert( "! {\"name\":\"steve\"}.empty?()" );
 
 
 //
-// Convert an integer to a float.
+// Convert an int to a float.
 //
-function integer.to_f() {
+function int.to_f() {
    return( self + 0.0);
 }
 
@@ -640,7 +640,7 @@ assert( "3.to_f() == 3.0" );
 // Count occurences of the given character in the string.
 //
 function string.count(char) {
-  let c = 0;
+  var c = 0;
 
   foreach chr in self {
      if ( chr == char ) {
@@ -664,8 +664,8 @@ assert( "\"犬犬犬犬犬犬狐\".count(\"犬\") == 6" );
 // Remove leading whitespace from the string.
 //
 function string.ltrim() {
-   let reg = "^(\\s+)(.*)$";
-   let out = match(reg, self);
+   var reg = "^(\\s+)(.*)$";
+   var out = match(reg, self);
 
    if ( out ) {
       return( out[1]) ;
@@ -687,7 +687,7 @@ assert( ( "  steve  ".ltrim() == "steve  "), "string.ltrim failed" );
 // Repeat a string N times.
 //
 function string.repeat(count) {
-  let r= "";
+  var r= "";
 
   if ( count < 1 ) {
      return self;
@@ -713,8 +713,8 @@ assert( ( "*".repeat(-1) == "*"), "string.repeat failed" );
 // Reverse a string,
 //
 function string.reverse() {
-  let r= "";
-  let l = len(self);
+  var r= "";
+  var l = len(self);
 
   for( l > 0 ) {
      r += self[l-1];
@@ -735,8 +735,8 @@ assert( ( "322".reverse() == "223"), "string.reverse failed" );
 // Remove trailing whitespace from the string.
 //
 function string.rtrim() {
-   let reg = "^(.*?)(\\s*)$";
-   let out = match(reg, self);
+   var reg = "^(.*?)(\\s*)$";
+   var out = match(reg, self);
 
    if ( out ) {
       return( out[0]) ;
@@ -780,8 +780,8 @@ function string.substr(start,length = -1) {
       return "";
    }
 
-   let res = "";
-   let copied = 0;
+   var res = "";
+   var copied = 0;
 
    for( (start < len(self)) && ( copied < length ) ) {
      res += self[start];
@@ -811,11 +811,11 @@ assert( "狐犬".substr( -1,100 ) == "狐犬" , "string.substr() failed");
 function string.find( needle ) {
 
    // get details about ourself
-   let i = 0;
-   let l = len(self);
+   var i = 0;
+   var l = len(self);
 
    // the length of our search string.
-   let L = len(needle);
+   var L = len(needle);
 
    // get a substring at each possible position
    for( i < l ) {
@@ -847,17 +847,17 @@ assert( "\"st狐eve犬es\".find(\"犬\" ) == 6" );
 // the specified hash.
 //
 function string.interpolate( hsh ) {
-   let reg = "(?s)^(.*?)\\$\\{([^\\}]+)\\}(.*)";
-   let out = match(reg, self);
+   var reg = "(?s)^(.*?)\\$\\{([^\\}]+)\\}(.*)";
+   var out = match(reg, self);
 
    for( out ) {
 
-      let pre = out[0];
-      let tok = out[1];
-      let pst = out[2];
+      var pre = out[0];
+      var tok = out[1];
+      var pst = out[2];
 
-      let self = pre + string(hsh[tok]) + pst;
-      let out = match(reg, self);
+      var self = pre + string(hsh[tok]) + pst;
+      var out = match(reg, self);
    }
    return( self );
 }
@@ -871,16 +871,16 @@ function string.interpolate( hsh ) {
 // By default the split is on whitespace: " ", "TAB", & "RETURN".
 //
 function string.split(sep = " \r\t\n" ) {
-  let i = 0;
-  let l = len(self);
-  let r = [];
+  var i = 0;
+  var l = len(self);
+  var r = [];
 
-  let tmp = "";
+  var tmp = "";
 
   for( i < l ) {
 
      // get the character.
-     let c = self[i];
+     var c = self[i];
 
      // is the character one of our split-characters?
      if ( sep.find( c ) != -1 ) {
@@ -923,16 +923,16 @@ assert( "type(\"1 2 3\".split(\"2\")) == \"array\"" );
 // with a new value.
 //
 function string.replace( old, new ) {
-  let s = self;
-  let index = s.find( old );
+  var s = self;
+  var index = s.find( old );
 
   for( index >= 0 ) {
 
      // get the prefix
-     let pre = s.substr(0, index);
+     var pre = s.substr(0, index);
 
      // get the suffix
-     let suf = s.substr( index + len(old) );
+     var suf = s.substr( index + len(old) );
 
      s = pre + new + suf;
 
@@ -955,7 +955,7 @@ assert( "steve".replace( "A", "EE" ) == "steve", "string.replace() failed" );
 // Trim leading & trailing whitespace from the given string.
 //
 function string.trim() {
-   let l = self.ltrim();
+   var l = self.ltrim();
    return( l.rtrim() );
 }
 
@@ -971,7 +971,7 @@ assert( " 1 ".trim() == "1", "string.trim failed" );
 // Convert the given string to lower-case.
 //
 function string.tolower() {
-   let r = "";
+   var r = "";
 
    foreach char in self {
       if ( char >= "A" && char <= "Z" ) {
@@ -1001,8 +1001,8 @@ assert( "狐犬".tolower() == "狐犬", "string.tolower() failed" );
 // (Possibly an int, possibly a float)
 //
 function string.to_number() {
-   let reg = "\\.";
-   let out = match(reg, self);
+   var reg = "\\.";
+   var out = match(reg, self);
 
    if ( out ) {
       return( self.to_f() );
@@ -1014,7 +1014,7 @@ function string.to_number() {
 assert( "3.13".to_number() == 3.13, "string.tonumber() failed" );
 assert( type("3.13".to_number() ) == "float", "string.tonumber() failed" );
 assert( "313".to_number() == 313, "string.tonumber() failed" );
-assert( type("313".to_number() ) == "integer", "string.tonumber() failed" );
+assert( type("313".to_number() ) == "int", "string.tonumber() failed" );
 
 
 
@@ -1027,7 +1027,7 @@ assert( type("313".to_number() ) == "integer", "string.tonumber() failed" );
 // Convert the given string to upper-case.
 //
 function string.toupper() {
-   let r = "";
+   var r = "";
 
    foreach char in self {
       if ( char >= "a" && char <= "z" ) {
