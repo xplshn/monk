@@ -33,26 +33,28 @@ puts("int   max = ", max_i, "\n");
 // Basic arithmetic tests
 puts("\nBasic arithmetic:\n");
 
-puts("5 + 3 = ", i + int(3), "\n");
-puts("10 - 7 = ", int(10) - int(7), "\n");
-puts("4 * 6 = ", int(4) * int(6), "\n");
-puts("20 / 5 = ", int(20) / int(5), "\n");
+puts("5 + 3 = ", int8(i) + int8(3), "\n");
+puts("10 - 7 = ", int16(10) - int16(7), "\n");
+puts("4 * 6 = ", int32(4) * int32(6), "\n");
+puts("20 / 5 = ", int64(20) / int64(5), "\n");
 
-// Test type conversions and to_f method
-puts("\nType conversions and to_f:\n");
+// Test type conversions
+puts("\nType conversions:\n");
 
-puts("int8(10).to_f() = ", i8(10).to_f(), "\n");
-puts("int16(20).to_f() = ", i16(20).to_f(), "\n");
-puts("int32(30).to_f() = ", i32(30).to_f(), "\n");
+puts("int8(i).type():    ", int8(i).type(), "\n");
+puts("int16(i8).type():  ", int16(i8).type(), "\n");
+puts("int32(i16).type(): ", int32(i16).type(), "\n");
+puts("int64(i32).type(): ", int64(i32).type(), "\n");
+puts("int(i64).type():   ", int(i64).type(), "\n");
 
 // Type checks
 puts("\nType checks:\n");
 
-puts("typeof int8(0) = ", typeof(i8), "\n");
-puts("typeof int16(0) = ", typeof(i16), "\n");
-puts("typeof int32(0) = ", typeof(i32), "\n");
-puts("typeof int64(0) = ", typeof(i64), "\n");
-puts("typeof int(0) = ", typeof(i), "\n");
+puts("i:   ", i.type(), "\n");
+puts("i8:  ", i8.type(), "\n");
+puts("i16: ", i16.type(), "\n");
+puts("i32: ", i32.type(), "\n");
+puts("i64: ", i64.type(), "\n");
 
 // Check integer bounds with operations
 puts("\nCheck overflow behavior (wrap-around or error expected):\n");

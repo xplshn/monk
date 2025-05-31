@@ -100,37 +100,464 @@ func exitFun(args ...object.Object) object.Object {
 	return NIL
 }
 
-// convert a double/string to an int
+// convert an integer/double/string to an int
 func intFun(args ...object.Object) object.Object {
 	if len(args) != 1 {
-		return newError("wrong number of arguments. got=%d, want=1",
-			len(args))
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
 	}
-	switch args[0].(type) {
+	switch arg := args[0].(type) {
 	case *object.String:
-		input := args[0].(*object.String).Value
+		input := arg.Value
 		i, err := strconv.Atoi(input)
 		if err == nil {
 			return &object.Int{Value: i}
 		}
 		return newError("Converting string '%s' to int failed %s", input, err.Error())
-
 	case *object.Boolean:
-		input := args[0].(*object.Boolean).Value
-		if input {
+		if arg.Value {
 			return &object.Int{Value: 1}
-
 		}
 		return &object.Int{Value: 0}
-	case *object.Int:
-		// nop
-		return args[0]
 	case *object.Float:
-		input := args[0].(*object.Float).Value
-		return &object.Int{Value: int(input)}
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Int:
+		return arg
+	case *object.Int8:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Int16:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Int32:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Int64:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Uint:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Uint8:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Uint16:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Uint32:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Uint64:
+		return &object.Int{Value: int(arg.Value)}
+	case *object.Uintptr:
+		return &object.Int{Value: int(arg.Value)}
 	default:
-		return newError("argument to `int` not supported, got=%s",
-			args[0].Type())
+		return newError("argument to `int` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to int8
+func int8Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseInt(arg.Value, 10, 8)
+		if err != nil {
+			return newError("could not convert string to int8: %v", err)
+		}
+		return &object.Int8{Value: int8(i)}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Int8{Value: 1}
+		}
+		return &object.Int8{Value: 0}
+	case *object.Int:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Int8:
+		return arg
+	case *object.Int16:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Int32:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Int64:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Uint:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Uint8:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Uint16:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Uint32:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Uint64:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Uintptr:
+		return &object.Int8{Value: int8(arg.Value)}
+	case *object.Float:
+		return &object.Int8{Value: int8(arg.Value)}
+	default:
+		return newError("argument to `int8` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to int16
+func int16Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseInt(arg.Value, 10, 16)
+		if err != nil {
+			return newError("could not convert string to int16: %v", err)
+		}
+		return &object.Int16{Value: int16(i)}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Int16{Value: 1}
+		}
+		return &object.Int16{Value: 0}
+	case *object.Int:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Int8:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Int16:
+		return arg
+	case *object.Int32:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Int64:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Uint:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Uint8:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Uint16:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Uint32:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Uint64:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Uintptr:
+		return &object.Int16{Value: int16(arg.Value)}
+	case *object.Float:
+		return &object.Int16{Value: int16(arg.Value)}
+	default:
+		return newError("argument to `int16` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to int32
+func int32Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseInt(arg.Value, 10, 32)
+		if err != nil {
+			return newError("could not convert string to int32: %v", err)
+		}
+		return &object.Int32{Value: int32(i)}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Int32{Value: 1}
+		}
+		return &object.Int32{Value: 0}
+	case *object.Int:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Int8:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Int16:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Int32:
+		return arg
+	case *object.Int64:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Uint:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Uint8:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Uint16:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Uint32:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Uint64:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Uintptr:
+		return &object.Int32{Value: int32(arg.Value)}
+	case *object.Float:
+		return &object.Int32{Value: int32(arg.Value)}
+	default:
+		return newError("argument to `int32` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to int64
+func int64Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseInt(arg.Value, 10, 64)
+		if err != nil {
+			return newError("could not convert string to int64: %v", err)
+		}
+		return &object.Int64{Value: i}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Int64{Value: 1}
+		}
+		return &object.Int64{Value: 0}
+	case *object.Int:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Int8:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Int16:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Int32:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Int64:
+		return arg
+	case *object.Uint:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Uint8:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Uint16:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Uint32:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Uint64:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Uintptr:
+		return &object.Int64{Value: int64(arg.Value)}
+	case *object.Float:
+		return &object.Int64{Value: int64(arg.Value)}
+	default:
+		return newError("argument to `int64` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to uint8
+func uint8Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseUint(arg.Value, 10, 8)
+		if err != nil {
+			return newError("could not convert string to uint8: %v", err)
+		}
+		return &object.Uint8{Value: uint8(i)}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Uint8{Value: 1}
+		}
+		return &object.Uint8{Value: 0}
+	case *object.Int:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Int8:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Int16:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Int32:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Int64:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Uint:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Uint8:
+		return arg
+	case *object.Uint16:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Uint32:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Uint64:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Uintptr:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	case *object.Float:
+		return &object.Uint8{Value: uint8(arg.Value)}
+	default:
+		return newError("argument to `uint8` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to uint16
+func uint16Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseUint(arg.Value, 10, 16)
+		if err != nil {
+			return newError("could not convert string to uint16: %v", err)
+		}
+		return &object.Uint16{Value: uint16(i)}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Uint16{Value: 1}
+		}
+		return &object.Uint16{Value: 0}
+	case *object.Int:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Int8:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Int16:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Int32:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Int64:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Uint:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Uint8:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Uint16:
+		return arg
+	case *object.Uint32:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Uint64:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Uintptr:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	case *object.Float:
+		return &object.Uint16{Value: uint16(arg.Value)}
+	default:
+		return newError("argument to `uint16` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to uint32
+func uint32Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseUint(arg.Value, 10, 32)
+		if err != nil {
+			return newError("could not convert string to uint32: %v", err)
+		}
+		return &object.Uint32{Value: uint32(i)}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Uint32{Value: 1}
+		}
+		return &object.Uint32{Value: 0}
+	case *object.Int:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Int8:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Int16:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Int32:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Int64:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Uint:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Uint8:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Uint16:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Uint32:
+		return arg
+	case *object.Uint64:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Uintptr:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	case *object.Float:
+		return &object.Uint32{Value: uint32(arg.Value)}
+	default:
+		return newError("argument to `uint32` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to uint64
+func uint64Fun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseUint(arg.Value, 10, 64)
+		if err != nil {
+			return newError("could not convert string to uint64: %v", err)
+		}
+		return &object.Uint64{Value: i}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Uint64{Value: 1}
+		}
+		return &object.Uint64{Value: 0}
+	case *object.Int:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Int8:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Int16:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Int32:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Int64:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Uint:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Uint8:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Uint16:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Uint32:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Uint64:
+		return arg
+	case *object.Uintptr:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	case *object.Float:
+		return &object.Uint64{Value: uint64(arg.Value)}
+	default:
+		return newError("argument to `uint64` not supported, got=%s", args[0].Type())
+	}
+}
+
+// convert to uint
+func uintFun(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return newError("wrong number of arguments. got=%d, want=1", len(args))
+	}
+	switch arg := args[0].(type) {
+	case *object.String:
+		i, err := strconv.ParseUint(arg.Value, 10, strconv.IntSize)
+		if err != nil {
+			return newError("could not convert string to uint: %v", err)
+		}
+		return &object.Uint{Value: uint(i)}
+	case *object.Boolean:
+		if arg.Value {
+			return &object.Uint{Value: 1}
+		}
+		return &object.Uint{Value: 0}
+	case *object.Int:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Int8:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Int16:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Int32:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Int64:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Uint:
+		return arg
+	case *object.Uint8:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Uint16:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Uint32:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Uint64:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Uintptr:
+		return &object.Uint{Value: uint(arg.Value)}
+	case *object.Float:
+		return &object.Uint{Value: uint(arg.Value)}
+	default:
+		return newError("argument to `uint` not supported, got=%s", args[0].Type())
 	}
 }
 
@@ -579,25 +1006,25 @@ func typeFun(args ...object.Object) object.Object {
 	case *object.Int:
 		return &object.String{Value: "int"}
 	case *object.Int8:
-			return &object.String{Value: "int8"}
+		return &object.String{Value: "int8"}
 	case *object.Int16:
-			return &object.String{Value: "int16"}
+		return &object.String{Value: "int16"}
 	case *object.Int32:
-			return &object.String{Value: "int32"}
+		return &object.String{Value: "int32"}
 	case *object.Int64:
-			return &object.String{Value: "int64"}
+		return &object.String{Value: "int64"}
 	case *object.Uint:
 		return &object.String{Value: "uint"}
 	case *object.Uint8:
-			return &object.String{Value: "uint8"}
+		return &object.String{Value: "uint8"}
 	case *object.Uint16:
-			return &object.String{Value: "uint16"}
+		return &object.String{Value: "uint16"}
 	case *object.Uint32:
-			return &object.String{Value: "uint32"}
+		return &object.String{Value: "uint32"}
 	case *object.Uint64:
-			return &object.String{Value: "uint64"}
+		return &object.String{Value: "uint64"}
 	case *object.Uintptr:
-			return &object.String{Value: "uintptr"}
+		return &object.String{Value: "uintptr"}
 	case *object.Float:
 		return &object.String{Value: "float"}
 	case *object.Hash:
@@ -644,6 +1071,42 @@ func init() {
 	RegisterBuiltin("int",
 		func(env *object.Environment, args ...object.Object) object.Object {
 			return (intFun(args...))
+		})
+	RegisterBuiltin("int8",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return int8Fun(args...)
+		})
+	RegisterBuiltin("int16",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return int16Fun(args...)
+		})
+	RegisterBuiltin("int32",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return int32Fun(args...)
+		})
+	RegisterBuiltin("int64",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return int64Fun(args...)
+		})
+	RegisterBuiltin("uint",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return uintFun(args...)
+		})
+	RegisterBuiltin("uint8",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return uint8Fun(args...)
+		})
+	RegisterBuiltin("uint16",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return uint16Fun(args...)
+		})
+	RegisterBuiltin("uint32",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return uint32Fun(args...)
+		})
+	RegisterBuiltin("uint64",
+		func(env *object.Environment, args ...object.Object) object.Object {
+			return uint64Fun(args...)
 		})
 	RegisterBuiltin("keys",
 		func(env *object.Environment, args ...object.Object) object.Object {
