@@ -59,7 +59,7 @@ The interpreter in _this_ repository has been significantly extended from the st
 * Allow comparisions to be complex:
   * `if ( a >= 'a' && a <= 'z' ) ..`
   * `if ( a || b ) ..`
-* Allow assignments without `let`.
+* Allow assignments without `var`.
     * This also allows operators such as "`+=`", "`-=`", "`*=`", & "`/=`" to work.
 * Added command-line handling, so that scripts can read their own arguments.
 * Added global-constants available by default
@@ -161,10 +161,10 @@ demonstrate these things, as well as parts of the standard-library.
 
 ## 2.1 Definitions
 
-Variables are defined using the `let` keyword, with each line ending with `;`.
+Variables are defined using the `var` keyword, with each line ending with `;`.
 
-      let a = 3;
-      let b = 1.2;
+      var a = 3;
+      var b = 1.2;
 
 Variables may be integers, floats, strings, or arrays/hashes (which are discussed later).
 
@@ -173,15 +173,15 @@ Some variables are defined by default, for example:
     puts( PI ); // Outputs: 3.14159..
     puts( E );  // Outputs: 2.71828..
 
-Variables may be updated without the need for `let`, for example this works
+Variables may be updated without the need for `var`, for example this works
 as you would expect:
 
-    let world = "Earth";
+    var world = "Earth";
     world = "world";
     puts( "Hello, " + world + "!\n");
 
 If you're __not__ running with `pragma("strict");` you can also declare and
-use variables without the need for `let`, but that should be avoided as
+use variables without the need for `var`, but that should be avoided as
 typos will cause much confusion!
 
      name = "Steve";
@@ -196,8 +196,8 @@ typos will cause much confusion!
 The `int` type is represented by `int64` and `float` type is represented by `float64`.
 
 
-       let a = 3;
-       let b = 1.2;
+       var a = 3;
+       var b = 1.2;
 
        puts( a + b  );  // Outputs: 4.2
        puts( a - b  );  // Outputs: 1.8
@@ -219,17 +219,17 @@ When operating with integers the modulus operator is available too, via `%`.
 
 An array is a list which organizes items by linear sequence.  Arrays can hold multiple types.
 
-     let a = [1, 2.3, "array"];
-     let b = [false, true, "Hello World", 3, 3.13];
+     var a = [1, 2.3, "array"];
+     var b = [false, true, "Hello World", 3, 3.13];
 
 
 Adding to an array is done via the `push` function:
 
-     let a = push(a, "another");
+     var a = push(a, "another");
 
 You can iterate over the contents of an array like so:
 
-     let i = 0;
+     var i = 0;
      for( i < len(a) ) {
         puts( "Array index ", i, " contains ", a[i], "\n");
         i++
@@ -244,7 +244,7 @@ With the definition we included that produces this output:
 
 As a helper you may define an array of consecutive integers via the range operator (`..`):
 
-     let a = 1..10;
+     var a = 1..10;
 
 
 ### 2.3.2 Hashes
@@ -252,7 +252,7 @@ As a helper you may define an array of consecutive integers via the range operat
 A hash is a key/value container, but note that keys may only be of type `boolean`, `int` and `string`.
 
 
-    let a = {"name":"monkey",
+    var a = {"name":"monkey",
              true:1,
              7:"seven"};
 
@@ -263,7 +263,7 @@ A hash is a key/value container, but note that keys may only be of type `boolean
 Updating a hash is done via the `set` function, but note that this returns
 an updated hash - rather than changing in-place:
 
-    let b = set(a, 8, "eight");
+    var b = set(a, 8, "eight");
     puts(b);  // Outputs: {name: monkey, true: 1, 7: seven, 8: eight}
 
 You can iterate over the keys in a hash via the `keys` function, or delete
@@ -343,14 +343,14 @@ Nothing special is required, the following will suffice as you'd expect:
 naming/invocation purposes:
 
 
-    let add = fn(a, b) { return a + b;};
+    var add = fn(a, b) { return a + b;};
     puts(add(1,2));  // Outputs: 3
 
     // functions can be used via their variables
-    let addTwo = fn(a,b, f) { return 2 + f(a, b);};
+    var addTwo = fn(a,b, f) { return 2 + f(a, b);};
     puts( addTwo(1,2, add) ); // outputs: 5.
 
-It is also possible to define a function without the use of `let`, via the `function` keyword.  This was added to make the language feel more natural to C-developers:
+It is also possible to define a function without the use of `var`, via the `function` keyword.  This was added to make the language feel more natural to C-developers:
 
     function hello() { puts "Hello, world\n" ; };
     hello();   // Outputs: Hello, world" to the console.
