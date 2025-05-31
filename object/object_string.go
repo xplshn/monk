@@ -40,7 +40,7 @@ func (s *String) HashKey() HashKey {
 // (Built-in methods only.)
 func (s *String) InvokeMethod(method string, env Environment, args ...Object) Object {
 	if method == "len" {
-		return &Integer{Value: int64(utf8.RuneCountInString(s.Value))}
+		return &Int{Value: utf8.RuneCountInString(s.Value)}
 	}
 	if method == "methods" {
 		static := []string{"len", "methods", "ord", "to_i", "to_f"}
@@ -62,14 +62,14 @@ func (s *String) InvokeMethod(method string, env Environment, args ...Object) Ob
 		return &Array{Elements: result}
 	}
 	if method == "ord" {
-		return &Integer{Value: int64(s.Value[0])}
+		return &Int{Value: int(s.Value[0])}
 	}
 	if method == "to_i" {
 		i, err := strconv.ParseInt(s.Value, 0, 64)
 		if err != nil {
 			i = 0
 		}
-		return &Integer{Value: int64(i)}
+		return &Int{Value: int(i)}
 	}
 	if method == "to_f" {
 		i, err := strconv.ParseFloat(s.Value, 64)
@@ -100,10 +100,10 @@ func (s *String) Next() (Object, Object, bool) {
 		// Now index
 		val := &String{Value: string(chars[s.offset-1])}
 
-		return val, &Integer{Value: int64(s.offset - 1)}, true
+		return val, &Int{Value: s.offset - 1}, true
 	}
 
-	return nil, &Integer{Value: 0}, false
+	return nil, &Int{Value: 0}, false
 }
 
 // ToInterface converts this object to a go-interface, which will allow

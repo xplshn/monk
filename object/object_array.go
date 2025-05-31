@@ -37,7 +37,7 @@ func (ao *Array) Inspect() string {
 // (Built-in methods only.)
 func (ao *Array) InvokeMethod(method string, env Environment, args ...Object) Object {
 	if method == "len" {
-		return &Integer{Value: int64(len(ao.Elements))}
+		return &Int{Value: len(ao.Elements)}
 	}
 	if method == "methods" {
 		static := []string{"len", "methods"}
@@ -73,10 +73,10 @@ func (ao *Array) Next() (Object, Object, bool) {
 		ao.offset++
 
 		element := ao.Elements[ao.offset-1]
-		return element, &Integer{Value: int64(ao.offset - 1)}, true
+		return element, &Int{Value: ao.offset - 1}, true
 	}
 
-	return nil, &Integer{Value: 0}, false
+	return nil, &Int{Value: 0}, false
 }
 
 // ToInterface converts this object to a go-interface, which will allow

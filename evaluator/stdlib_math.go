@@ -14,12 +14,12 @@ func mathAbs(args ...object.Object) object.Object {
 			len(args))
 	}
 	switch arg := args[0].(type) {
-	case *object.Integer:
+	case *object.Int:
 		v := arg.Value
 		if v < 0 {
 			v = v * -1
 		}
-		return &object.Integer{Value: v}
+		return &object.Int{Value: v}
 	case *object.Float:
 		v := arg.Value
 		if v < 0 {
@@ -45,7 +45,7 @@ func mathSqrt(args ...object.Object) object.Object {
 			len(args))
 	}
 	switch arg := args[0].(type) {
-	case *object.Integer:
+	case *object.Int:
 		v := arg.Value
 		return &object.Float{Value: math.Sqrt(float64(v))}
 	case *object.Float:

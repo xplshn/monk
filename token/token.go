@@ -42,6 +42,16 @@ const (
 	ILLEGAL         = "ILLEGAL"
 	IN              = "IN"
 	INT             = "INT"
+	INT8            = "INT8"
+	INT16           = "INT16"
+	INT32           = "INT32"
+	INT64           = "INT64"
+	UINT            = "UINT"
+	UINT8           = "UINT8"
+	UINT16          = "UINT16"
+	UINT32          = "UINT32"
+	UINT64          = "UINT64"
+	UINTPTR         = "UINTPTR"
 	LBRACE          = "{"
 	LBRACKET        = "["
 	VAR             = "VAR"
@@ -85,7 +95,7 @@ var keywords = map[string]Type{
 	"fn":       FUNCTION,
 	"for":      FOR,
 	"foreach":  FOREACH,
-	"function": DEFINE_FUNCTION,
+	"func": DEFINE_FUNCTION,
 	"if":       IF,
 	"in":       IN,
 	"var":      VAR,
@@ -94,9 +104,12 @@ var keywords = map[string]Type{
 	"switch":   SWITCH,
 	"true":     TRUE,
 
-	// Monkey compat
-	"null":     NIL,
+	// monkey compat
 	"let":      VAR,
+
+	// skx/monkey compat
+	"null":     NIL,
+	"function": DEFINE_FUNCTION,
 }
 
 // LookupIdentifier used to determinate whether identifier is keyword nor not

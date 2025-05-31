@@ -137,7 +137,7 @@ func (h *Hash) Next() (Object, Object, bool) {
 		}
 	}
 
-	return nil, &Integer{Value: 0}, false
+	return nil, &Int{Value: 0}, false
 }
 
 // ToInterface converts this object to a go-interface, which will allow

@@ -10,38 +10,29 @@ import (
 	"github.com/xplshn/monk/token"
 )
 
-// Node reresents a node.
+// Node represents a node.
 type Node interface {
-	// TokenLiteral returns the literal of the token.
 	TokenLiteral() string
-
-	// String returns this object as a string.
 	String() string
 }
 
 // Statement represents a single statement.
 type Statement interface {
-	// Node is the node holding the actual statement
 	Node
-
 	statementNode()
 }
 
 // Expression represents a single expression.
 type Expression interface {
-	// Node is the node holding the expression.
 	Node
 	expressionNode()
 }
 
 // Program represents a complete program.
 type Program struct {
-	// Statements is the set of statements which the program is comprised
-	// of.
 	Statements []Statement
 }
 
-// TokenLiteral returns the literal token of our program.
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
 		return p.Statements[0].TokenLiteral()
@@ -49,7 +40,6 @@ func (p *Program) TokenLiteral() string {
 	return ""
 }
 
-// String returns this object as a string.
 func (p *Program) String() string {
 	var out bytes.Buffer
 	for _, stmt := range p.Statements {
@@ -58,24 +48,15 @@ func (p *Program) String() string {
 	return out.String()
 }
 
-// VarStatement holds a Var-statemnt
+// VarStatement holds a var statement
 type VarStatement struct {
-	// Token holds the token
 	Token token.Token
-
-	// Name is the name of the variable to which we're assigning
-	Name *Identifier
-
-	// Value is the thing we're storing in the variable.
+	Name  *Identifier
 	Value Expression
 }
 
 func (ls *VarStatement) statementNode() {}
-
-// TokenLiteral returns the literal token.
 func (ls *VarStatement) TokenLiteral() string { return ls.Token.Literal }
-
-// String returns this object as a string.
 func (ls *VarStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString(ls.TokenLiteral() + " ")
@@ -88,25 +69,15 @@ func (ls *VarStatement) String() string {
 	return out.String()
 }
 
-// ConstStatement is the same as a var-statement, but the value
-// can't be changed later.
+// ConstStatement is like VarStatement but value is immutable
 type ConstStatement struct {
-	// Token is the token
 	Token token.Token
-
-	// Name is the name of the variable we're setting
-	Name *Identifier
-
-	// Value contains the value which is to be set
+	Name  *Identifier
 	Value Expression
 }
 
 func (ls *ConstStatement) statementNode() {}
-
-// TokenLiteral returns the literal token.
 func (ls *ConstStatement) TokenLiteral() string { return ls.Token.Literal }
-
-// String returns this object as a string.
 func (ls *ConstStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString(ls.TokenLiteral() + " ")
@@ -121,63 +92,40 @@ func (ls *ConstStatement) String() string {
 
 // Identifier holds a single identifier.
 type Identifier struct {
-	// Token is the literal token
 	Token token.Token
-
-	// Value is the name of the identifier
 	Value string
 }
 
 func (i *Identifier) expressionNode() {}
-
-// TokenLiteral returns the literal token.
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
-
-// String returns this object as a string.
-func (i *Identifier) String() string {
-	return i.Value
-}
+func (i *Identifier) String() string { return i.Value }
 
 // ReturnStatement stores a return-statement
 type ReturnStatement struct {
-	// Token contains the literal token.
-	Token token.Token
-
-	// ReturnValue is the value whichis to be returned.
+	Token       token.Token
 	ReturnValue Expression
 }
 
 func (rs *ReturnStatement) statementNode() {}
-
-// TokenLiteral returns the literal token.
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
-
-// String returns this object as a string.
 func (rs *ReturnStatement) String() string {
 	var out bytes.Buffer
 	out.WriteString(rs.TokenLiteral() + " ")
 	if rs.ReturnValue != nil {
-		out.WriteString(rs.ReturnValue.TokenLiteral())
+		out.WriteString(rs.ReturnValue.String())
 	}
 	out.WriteString(";")
 	return out.String()
 }
 
-// ExpressionStatement is an expression
+// ExpressionStatement is an expression wrapped as a statement
 type ExpressionStatement struct {
-	// Token is the literal token
-	Token token.Token
-
-	// Expression holds the expression
+	Token      token.Token
 	Expression Expression
 }
 
 func (es *ExpressionStatement) statementNode() {}
-
-// TokenLiteral returns the literal token.
 func (es *ExpressionStatement) TokenLiteral() string { return es.Token.Literal }
-
-// String returns this object as a string.
 func (es *ExpressionStatement) String() string {
 	if es.Expression != nil {
 		return es.Expression.String()
@@ -185,38 +133,126 @@ func (es *ExpressionStatement) String() string {
 	return ""
 }
 
-// IntegerLiteral holds an integer
-type IntegerLiteral struct {
-	// Token is the literal token
-	Token token.Token
+// Numeric literal types:
 
-	// Value holds the integer.
+// IntLiteral holds an int
+type IntLiteral struct {
+	Token token.Token
+	Value int
+}
+
+func (il *IntLiteral) expressionNode() {}
+func (il *IntLiteral) TokenLiteral() string { return il.Token.Literal }
+func (il *IntLiteral) String() string { return il.Token.Literal }
+
+// Int8Literal holds an int8
+type Int8Literal struct {
+	Token token.Token
+	Value int8
+}
+
+func (il *Int8Literal) expressionNode() {}
+func (il *Int8Literal) TokenLiteral() string { return il.Token.Literal }
+func (il *Int8Literal) String() string { return il.Token.Literal }
+
+// Int16Literal holds an int16
+type Int16Literal struct {
+	Token token.Token
+	Value int16
+}
+
+func (il *Int16Literal) expressionNode() {}
+func (il *Int16Literal) TokenLiteral() string { return il.Token.Literal }
+func (il *Int16Literal) String() string { return il.Token.Literal }
+
+// Int32Literal holds an int32
+type Int32Literal struct {
+	Token token.Token
+	Value int32
+}
+
+func (il *Int32Literal) expressionNode() {}
+func (il *Int32Literal) TokenLiteral() string { return il.Token.Literal }
+func (il *Int32Literal) String() string { return il.Token.Literal }
+
+// Int64Literal holds an int64 (alias for IntLiteral but explicit)
+type Int64Literal struct {
+	Token token.Token
 	Value int64
 }
 
-func (il *IntegerLiteral) expressionNode() {}
+func (il *Int64Literal) expressionNode() {}
+func (il *Int64Literal) TokenLiteral() string { return il.Token.Literal }
+func (il *Int64Literal) String() string { return il.Token.Literal }
 
-// TokenLiteral returns the literal token.
-func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
+// UIntLiteral holds a uint64
+type UintLiteral struct {
+	Token token.Token
+	Value uint64
+}
 
-// String returns this object as a string.
-func (il *IntegerLiteral) String() string { return il.Token.Literal }
+func (ul *UintLiteral) expressionNode() {}
+func (ul *UintLiteral) TokenLiteral() string { return ul.Token.Literal }
+func (ul *UintLiteral) String() string { return ul.Token.Literal }
+
+// UInt8Literal holds a uint8
+type Uint8Literal struct {
+	Token token.Token
+	Value uint8
+}
+
+func (ul *Uint8Literal) expressionNode() {}
+func (ul *Uint8Literal) TokenLiteral() string { return ul.Token.Literal }
+func (ul *Uint8Literal) String() string { return ul.Token.Literal }
+
+// UInt16Literal holds a uint16
+type Uint16Literal struct {
+	Token token.Token
+	Value uint16
+}
+
+func (ul *Uint16Literal) expressionNode() {}
+func (ul *Uint16Literal) TokenLiteral() string { return ul.Token.Literal }
+func (ul *Uint16Literal) String() string { return ul.Token.Literal }
+
+// UInt32Literal holds a uint32
+type Uint32Literal struct {
+	Token token.Token
+	Value uint32
+}
+
+func (ul *Uint32Literal) expressionNode() {}
+func (ul *Uint32Literal) TokenLiteral() string { return ul.Token.Literal }
+func (ul *Uint32Literal) String() string { return ul.Token.Literal }
+
+// UInt64Literal holds a uint64 (alias for UIntLiteral but explicit)
+type Uint64Literal struct {
+	Token token.Token
+	Value uint64
+}
+
+func (ul *Uint64Literal) expressionNode() {}
+func (ul *Uint64Literal) TokenLiteral() string { return ul.Token.Literal }
+func (ul *Uint64Literal) String() string { return ul.Token.Literal }
+
+// UintptrLiteral holds a uintptr
+type UintptrLiteral struct {
+	Token token.Token
+	Value uintptr
+}
+
+func (ul *UintptrLiteral) expressionNode() {}
+func (ul *UintptrLiteral) TokenLiteral() string { return ul.Token.Literal }
+func (ul *UintptrLiteral) String() string { return ul.Token.Literal }
 
 // FloatLiteral holds a floating-point number
 type FloatLiteral struct {
-	// Token is the literal token
 	Token token.Token
-
-	// Value holds the floating-point number.
 	Value float64
 }
 
 func (fl *FloatLiteral) expressionNode() {}
-
-// TokenLiteral returns the literal token.
 func (fl *FloatLiteral) TokenLiteral() string { return fl.Token.Literal }
-
-// String returns this object as a string.
 func (fl *FloatLiteral) String() string { return fl.Token.Literal }
 
 // PrefixExpression holds a prefix-based expression

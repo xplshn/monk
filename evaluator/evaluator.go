@@ -58,8 +58,8 @@ func EvalContext(ctx context.Context, node ast.Node, env *object.Environment) ob
 		return EvalContext(ctx, node.Expression, env)
 
 	// Expressions
-	case *ast.IntegerLiteral:
-		return &object.Integer{Value: node.Value}
+	case *ast.IntLiteral:
+		return &object.Int{Value: node.Value}
 	case *ast.FloatLiteral:
 		return &object.Float{Value: node.Value}
 	case *ast.Boolean:
@@ -239,9 +239,9 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 		}
 
 		switch arg := val.(type) {
-		case *object.Integer:
+		case *object.Int:
 			v := arg.Value
-			env.Set(node.Token.Literal, &object.Integer{Value: v + 1})
+			env.Set(node.Token.Literal, &object.Int{Value: v + 1})
 			return arg
 		default:
 			return newError("%s is not an int", node.Token.Literal)
@@ -254,9 +254,9 @@ func evalPostfixExpression(env *object.Environment, operator string, node *ast.P
 		}
 
 		switch arg := val.(type) {
-		case *object.Integer:
+		case *object.Int:
 			v := arg.Value
-			env.Set(node.Token.Literal, &object.Integer{Value: v - 1})
+			env.Set(node.Token.Literal, &object.Int{Value: v - 1})
 			return arg
 		default:
 			return newError("%s is not an int", node.Token.Literal)
@@ -286,8 +286,8 @@ func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 	}
 
 	switch obj := right.(type) {
-	case *object.Integer:
-		return &object.Integer{Value: -obj.Value}
+	case *object.Int:
+		return &object.Int{Value: -obj.Value}
 	case *object.Float:
 		return &object.Float{Value: -obj.Value}
 	default:
@@ -303,13 +303,13 @@ func evalInfixExpression(operator string, left, right object.Object, env *object
 	}
 
 	switch {
-	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
+	case left.Type() == object.INT_OBJ && right.Type() == object.INT_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
 	case left.Type() == object.FLOAT_OBJ && right.Type() == object.FLOAT_OBJ:
 		return evalFloatInfixExpression(operator, left, right)
-	case left.Type() == object.FLOAT_OBJ && right.Type() == object.INTEGER_OBJ:
+	case left.Type() == object.FLOAT_OBJ && right.Type() == object.INT_OBJ:
 		return evalFloatIntegerInfixExpression(operator, left, right)
-	case left.Type() == object.INTEGER_OBJ && right.Type() == object.FLOAT_OBJ:
+	case left.Type() == object.INT_OBJ && right.Type() == object.FLOAT_OBJ:
 		return evalIntegerFloatInfixExpression(operator, left, right)
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
 		return evalStringInfixExpression(operator, left, right)
@@ -431,38 +431,38 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 		return newError("nil operand %v %v", left, right)
 	}
 
-	leftVal := left.(*object.Integer).Value
-	rightVal := right.(*object.Integer).Value
+	leftVal := left.(*object.Int).Value
+	rightVal := right.(*object.Int).Value
 	switch operator {
 	case "+":
-		return &object.Integer{Value: leftVal + rightVal}
+		return &object.Int{Value: leftVal + rightVal}
 	case "+=":
-		return &object.Integer{Value: leftVal + rightVal}
+		return &object.Int{Value: leftVal + rightVal}
 	case "%":
 		// Found by fuzzing
 		if rightVal == 0 {
 			return newError("divide by zero")
 		}
 
-		return &object.Integer{Value: leftVal % rightVal}
+		return &object.Int{Value: leftVal % rightVal}
 	case "**":
-		return &object.Integer{Value: int64(math.Pow(float64(leftVal), float64(rightVal)))}
+		return &object.Int{Value: int(math.Pow(float64(leftVal), float64(rightVal)))}
 	case "-":
-		return &object.Integer{Value: leftVal - rightVal}
+		return &object.Int{Value: leftVal - rightVal}
 	case "-=":
-		return &object.Integer{Value: leftVal - rightVal}
+		return &object.Int{Value: leftVal - rightVal}
 	case "*":
-		return &object.Integer{Value: leftVal * rightVal}
+		return &object.Int{Value: leftVal * rightVal}
 	case "*=":
-		return &object.Integer{Value: leftVal * rightVal}
+		return &object.Int{Value: leftVal * rightVal}
 	case "/":
 		// Found by fuzzing
 		if rightVal == 0 {
 			return newError("divide by zero")
 		}
-		return &object.Integer{Value: leftVal / rightVal}
+		return &object.Int{Value: leftVal / rightVal}
 	case "/=":
-		return &object.Integer{Value: leftVal / rightVal}
+		return &object.Int{Value: leftVal / rightVal}
 	case "<":
 		return nativeBoolToBooleanObject(leftVal < rightVal)
 	case "<=":
@@ -484,7 +484,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 		// Step is generally +1, but if we're going to
 		// express the range "10..0" it will be -1 to allow
 		// us to count down via subtraction
-		var step int64
+		var step int
 		step = 1.0
 
 		if rightVal < leftVal {
@@ -502,7 +502,7 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 		// Now make the range of integers, counting via the step.
 		i := 0
 		for i < len {
-			array[i] = &object.Integer{Value: leftVal}
+			array[i] = &object.Int{Value: leftVal}
 			leftVal += step
 			i++
 		}
@@ -558,7 +558,7 @@ func evalFloatInfixExpression(operator string, left, right object.Object) object
 
 func evalFloatIntegerInfixExpression(operator string, left, right object.Object) object.Object {
 	leftVal := left.(*object.Float).Value
-	rightVal := float64(right.(*object.Integer).Value)
+	rightVal := float64(right.(*object.Int).Value)
 	switch operator {
 	case "+":
 		return &object.Float{Value: leftVal + rightVal}
@@ -601,7 +601,7 @@ func evalFloatIntegerInfixExpression(operator string, left, right object.Object)
 }
 
 func evalIntegerFloatInfixExpression(operator string, left, right object.Object) object.Object {
-	leftVal := float64(left.(*object.Integer).Value)
+	leftVal := float64(left.(*object.Int).Value)
 	rightVal := right.(*object.Float).Value
 	switch operator {
 	case "+":
@@ -1081,7 +1081,7 @@ func backTickOperation(command string) object.Object {
 		if args, err = parseCommandLine(command); err != nil {
 			// Return an error hash for parsing failure.
 			return createCommandExecHash(&object.String{Value: ""}, &object.String{Value: "parse error: " + err.Error()},
-				&object.Integer{Value: -1})
+				&object.Int{Value: -1})
 		}
 	}
 
@@ -1089,7 +1089,7 @@ func backTickOperation(command string) object.Object {
 	if len(args) == 0 {
 		// Return an error hash for an empty command.
 		return createCommandExecHash(&object.String{Value: ""}, &object.String{Value: "no command"},
-			&object.Integer{Value: -1})
+			&object.Int{Value: -1})
 	}
 
 	// Run the command.
@@ -1100,7 +1100,7 @@ func backTickOperation(command string) object.Object {
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
-	var exitCode int64 = 0
+	var exitCode int = 0
 
 	// Execute the command and handle errors.
 	err = cmd.Run()
@@ -1109,14 +1109,14 @@ func backTickOperation(command string) object.Object {
 		if !errors.As(err, &exitError) {
 			// Handle non-ExitError errors (e.g., command not found).
 			return createCommandExecHash(&object.String{Value: ""}, &object.String{Value: fmt.Sprintf("Failed to run '%s' -> %s\n", command, err.Error())},
-				&object.Integer{Value: -1})
+				&object.Int{Value: -1})
 		}
-		exitCode = int64(exitError.ExitCode())
+		exitCode = int(exitError.ExitCode())
 	}
 
 	// Create a hash with 'stdout', 'stderr', and 'code' fields.
 	return createCommandExecHash(&object.String{Value: stdout.String()}, &object.String{Value: stderr.String()},
-		&object.Integer{Value: exitCode})
+		&object.Int{Value: exitCode})
 }
 
 // createCommandExecHash Create a hash with 'stdout', 'stderr', and 'code' fields.
@@ -1145,7 +1145,7 @@ func evalIndexExpression(left, index object.Object) object.Object {
 	}
 
 	switch {
-	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
+	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INT_OBJ:
 		return evalArrayIndexExpression(left, index)
 	case left.Type() == object.HASH_OBJ:
 		return evalHashIndexExpression(left, index)
@@ -1159,8 +1159,8 @@ func evalIndexExpression(left, index object.Object) object.Object {
 
 func evalArrayIndexExpression(array, index object.Object) object.Object {
 	arrayObject := array.(*object.Array)
-	idx := index.(*object.Integer).Value
-	max := int64(len(arrayObject.Elements) - 1)
+	idx := index.(*object.Int).Value
+	max := len(arrayObject.Elements) - 1
 	if idx < 0 || idx > max {
 		return NIL
 	}
@@ -1181,13 +1181,13 @@ func evalHashIndexExpression(hash, index object.Object) object.Object {
 
 func evalStringIndexExpression(input, index object.Object) object.Object {
 	str := input.(*object.String).Value
-	idx, isInt := index.(*object.Integer)
+	idx, isInt := index.(*object.Int)
 	if !isInt {
 		return newError("expected an integer for string index, got something else")
 	}
 
 	i := idx.Value
-	max := int64(len(str))
+	max := len(str)
 	if i < 0 || i > max {
 		return newError("index out of bounds")
 	}
@@ -1394,7 +1394,7 @@ func objectToNativeBoolean(o object.Object) bool {
 		return obj.Value != ""
 	case *object.Nil:
 		return false
-	case *object.Integer:
+	case *object.Int:
 		if obj.Value == 0 {
 			return false
 		}

@@ -348,7 +348,17 @@ func (l *Lexer) readIdentifier() string {
 	//
 	types := []string{"string.",
 		"array.",
-		"integer.",
+		"integer.", //FIXME: If I rename integer to int here, ints stop working when parsing files which use int variables. Why?
+		"int8.",
+		"int16.",
+		"int32.",
+		"int64.",
+		"uint.",
+		"uint8.",
+		"uint16.",
+		"uint32.",
+		"uint64.",
+		"uintptr.",
 		"float.",
 		"hash.",
 		"object."}
@@ -497,9 +507,9 @@ func (l *Lexer) readNumber() string {
 func (l *Lexer) readDecimal() token.Token {
 
 	//
-	// Read an integer-number.
+	// Read an int-number.
 	//
-	integer := l.readNumber()
+	i := l.readNumber()
 
 	//
 	// Now we either expect:
@@ -514,9 +524,9 @@ func (l *Lexer) readDecimal() token.Token {
 		//
 		l.readChar()
 		fraction := l.readNumber()
-		return token.Token{Type: token.FLOAT, Literal: integer + "." + fraction}
+		return token.Token{Type: token.FLOAT, Literal: i + "." + fraction}
 	}
-	return token.Token{Type: token.INT, Literal: integer}
+	return token.Token{Type: token.INT, Literal: i}
 }
 
 // read a string, deliminated by the given character.

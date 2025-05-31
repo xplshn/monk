@@ -131,7 +131,19 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
 	p.registerPrefix(token.IF, p.parseIfExpression)
 	p.registerPrefix(token.ILLEGAL, p.parsingBroken)
-	p.registerPrefix(token.INT, p.parseIntegerLiteral)
+
+	p.registerPrefix(token.INT, p.parseIntLiteral)
+	p.registerPrefix(token.INT8, p.parseInt8Literal)
+	p.registerPrefix(token.INT16, p.parseInt16Literal)
+	p.registerPrefix(token.INT32, p.parseInt32Literal)
+	p.registerPrefix(token.INT64, p.parseInt64Literal)
+	p.registerPrefix(token.UINT, p.parseUintLiteral)
+	p.registerPrefix(token.UINT8, p.parseUint8Literal)
+	p.registerPrefix(token.UINT16, p.parseUint16Literal)
+	p.registerPrefix(token.UINT32, p.parseUint32Literal)
+	p.registerPrefix(token.UINT64, p.parseUint64Literal)
+	p.registerPrefix(token.UINTPTR, p.parseUintptrLiteral)
+
 	p.registerPrefix(token.LBRACE, p.parseHashLiteral)
 	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
 	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
@@ -356,27 +368,146 @@ func (p *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 }
 
-// parseIntegerLiteral parses an integer literal.
-func (p *Parser) parseIntegerLiteral() ast.Expression {
-	lit := &ast.IntegerLiteral{Token: p.curToken}
-
-	var value int64
-	var err error
-
-	if strings.HasPrefix(p.curToken.Literal, "0b") {
-		value, err = strconv.ParseInt(p.curToken.Literal[2:], 2, 64)
-	} else if strings.HasPrefix(p.curToken.Literal, "0x") {
-		value, err = strconv.ParseInt(p.curToken.Literal[2:], 16, 64)
-	} else {
-		value, err = strconv.ParseInt(p.curToken.Literal, 10, 64)
-	}
-
+// parseIntLiteral parses an int literal.
+func (p *Parser) parseIntLiteral() ast.Expression {
+	lit := &ast.IntLiteral{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Literal, 10, 64)
 	if err != nil {
-		msg := fmt.Sprintf("could not parse %q as integer around line %d", p.curToken.Literal, p.l.GetLine())
+		msg := fmt.Sprintf("could not parse %q as int around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+ 	lit.Value = int(value)
+	return lit
+}
+
+// parseInt8Literal parses an int8 literal.
+func (p *Parser) parseInt8Literal() ast.Expression {
+	lit := &ast.Int8Literal{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Literal, 10, 8)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as int8 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = int8(value)
+	return lit
+}
+
+// parseInt16Literal parses an int16 literal.
+func (p *Parser) parseInt16Literal() ast.Expression {
+	lit := &ast.Int16Literal{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Literal, 10, 16)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as int16 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = int16(value)
+	return lit
+}
+
+// parseInt32Literal parses an int32 literal.
+func (p *Parser) parseInt32Literal() ast.Expression {
+	lit := &ast.Int32Literal{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Literal, 10, 32)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as int32 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = int32(value)
+	return lit
+}
+
+// parseInt64Literal parses an int64 literal.
+func (p *Parser) parseInt64Literal() ast.Expression {
+	lit := &ast.Int64Literal{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Literal, 10, 64)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as int64 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
 		p.errors = append(p.errors, msg)
 		return nil
 	}
 	lit.Value = value
+	return lit
+}
+
+// parseUint8Literal parses a uint8 literal.
+func (p *Parser) parseUint8Literal() ast.Expression {
+	lit := &ast.Uint8Literal{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Literal, 10, 8)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as uint8 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = uint8(value)
+	return lit
+}
+
+// parseUint16Literal parses a uint16 literal.
+func (p *Parser) parseUint16Literal() ast.Expression {
+	lit := &ast.Uint16Literal{Token: p.curToken}
+	value, err := strconv.ParseInt(p.curToken.Literal, 10, 16)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as uint16 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = uint16(value)
+	return lit
+}
+
+// parseUint32Literal parses a uint32 literal.
+func (p *Parser) parseUint32Literal() ast.Expression {
+	lit := &ast.Uint32Literal{Token: p.curToken}
+	value, err := strconv.ParseUint(p.curToken.Literal, 10, 32)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as uint32 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = uint32(value)
+	return lit
+}
+
+// parseUint64Literal parses a uint64 literal.
+func (p *Parser) parseUint64Literal() ast.Expression {
+	lit := &ast.Uint64Literal{Token: p.curToken}
+	value, err := strconv.ParseUint(p.curToken.Literal, 10, 64)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as uint64 around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = value
+	return lit
+}
+
+// parseUintLiteral parses a uint literal.
+func (p *Parser) parseUintLiteral() ast.Expression {
+	lit := &ast.UintLiteral{Token: p.curToken}
+	value, err := strconv.ParseUint(p.curToken.Literal, 10, 64)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as uint around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = value
+	return lit
+}
+
+// parseUintptrLiteral parses a uintptr literal.
+func (p *Parser) parseUintptrLiteral() ast.Expression {
+	lit := &ast.UintptrLiteral{Token: p.curToken}
+	value, err := strconv.ParseUint(p.curToken.Literal, 10, 64)
+	if err != nil {
+		msg := fmt.Sprintf("could not parse %q as uintptr around line %d: %s", p.curToken.Literal, p.l.GetLine(), err)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+	lit.Value = uintptr(value)
 	return lit
 }
 

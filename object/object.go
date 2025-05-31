@@ -6,7 +6,18 @@ type Type string
 
 // pre-defined constant Type
 const (
-	INTEGER_OBJ      = "INTEGER"
+	INT_OBJ    = "INT"
+	INT8_OBJ   = "INT8"
+	INT16_OBJ  = "INT16"
+	INT32_OBJ  = "INT32"
+	INT64_OBJ  = "INT64"
+	UINT_OBJ   = "UINT"
+	UINT8_OBJ  = "UINT8"
+	UINT16_OBJ = "UINT16"
+	UINT32_OBJ = "UINT32"
+	UINT64_OBJ = "UINT64"
+	UINTPTR_OBJ = "UINTPTR"
+
 	FLOAT_OBJ        = "FLOAT"
 	BOOLEAN_OBJ      = "BOOLEAN"
 	NIL_OBJ          = "NIL"
@@ -21,7 +32,7 @@ const (
 	REGEXP_OBJ       = "REGEXP"
 )
 
-// Object is the interface that all of our various object-types must implmenet.
+// Object is the interface that all of our various object-types must implement.
 type Object interface {
 
 	// Type returns the type of this object.
@@ -48,11 +59,6 @@ type Hashable interface {
 }
 
 // Iterable is an interface that some objects might support.
-//
-// If this interface is implemented then it will be possible to
-// use the `foreach` function to iterate over the object.  If
-// the interface is not implemented then a run-time error will
-// be generated instead.
 type Iterable interface {
 
 	// Reset the state of any previous iteration.

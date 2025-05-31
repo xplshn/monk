@@ -89,8 +89,8 @@ func exitFun(args ...object.Object) object.Object {
 	// Optionally an exit-code might be supplied as an argument
 	if len(args) > 0 {
 		switch arg := args[0].(type) {
-		case *object.Integer:
-			code = int(arg.Value)
+		case *object.Int:
+			code = arg.Value
 		case *object.Float:
 			code = int(arg.Value)
 		}
@@ -111,23 +111,23 @@ func intFun(args ...object.Object) object.Object {
 		input := args[0].(*object.String).Value
 		i, err := strconv.Atoi(input)
 		if err == nil {
-			return &object.Integer{Value: int64(i)}
+			return &object.Int{Value: i}
 		}
 		return newError("Converting string '%s' to int failed %s", input, err.Error())
 
 	case *object.Boolean:
 		input := args[0].(*object.Boolean).Value
 		if input {
-			return &object.Integer{Value: 1}
+			return &object.Int{Value: 1}
 
 		}
-		return &object.Integer{Value: 0}
-	case *object.Integer:
+		return &object.Int{Value: 0}
+	case *object.Int:
 		// nop
 		return args[0]
 	case *object.Float:
 		input := args[0].(*object.Float).Value
-		return &object.Integer{Value: int64(input)}
+		return &object.Int{Value: int(input)}
 	default:
 		return newError("argument to `int` not supported, got=%s",
 			args[0].Type())
@@ -142,11 +142,11 @@ func lenFun(args ...object.Object) object.Object {
 	}
 	switch arg := args[0].(type) {
 	case *object.String:
-		return &object.Integer{Value: int64(utf8.RuneCountInString(arg.Value))}
+		return &object.Int{Value: utf8.RuneCountInString(arg.Value)}
 	case *object.Nil:
-		return &object.Integer{Value: 0}
+		return &object.Int{Value: 0}
 	case *object.Array:
-		return &object.Integer{Value: int64(len(arg.Elements))}
+		return &object.Int{Value: len(arg.Elements)}
 	default:
 		return newError("argument to `len` not supported, got=%s",
 			args[0].Type())
@@ -192,7 +192,7 @@ func matchFun(args ...object.Object) object.Object {
 			for i := 1; i < len(res); i++ {
 
 				// Capture groups start at index 0.
-				k := &object.Integer{Value: int64(i - 1)}
+				k := &object.Int{Value: i - 1}
 				v := &object.String{Value: res[i]}
 
 				newHashPair := object.HashPair{Key: k, Value: v}
@@ -415,13 +415,13 @@ func statFun(args ...object.Object) object.Object {
 	//
 
 	// size -> int
-	sizeData := &object.Integer{Value: info.Size()}
+	sizeData := &object.Int64{Value: info.Size()}
 	sizeKey := &object.String{Value: "size"}
 	sizeHash := object.HashPair{Key: sizeKey, Value: sizeData}
 	res[sizeKey.HashKey()] = sizeHash
 
 	// mod-time -> int
-	mtimeData := &object.Integer{Value: info.ModTime().Unix()}
+	mtimeData := &object.Int64{Value: info.ModTime().Unix()}
 	mtimeKey := &object.String{Value: "mtime"}
 	mtimeHash := object.HashPair{Key: mtimeKey, Value: mtimeData}
 	res[mtimeKey.HashKey()] = mtimeHash
@@ -576,7 +576,7 @@ func typeFun(args ...object.Object) object.Object {
 		return &object.String{Value: "array"}
 	case *object.Function:
 		return &object.String{Value: "function"}
-	case *object.Integer:
+	case *object.Int:
 		return &object.String{Value: "integer"}
 	case *object.Float:
 		return &object.String{Value: "float"}
